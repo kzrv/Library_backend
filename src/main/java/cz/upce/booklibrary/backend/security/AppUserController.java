@@ -3,6 +3,7 @@ package cz.upce.booklibrary.backend.security;
 import cz.upce.booklibrary.backend.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/app-users")
@@ -53,8 +55,10 @@ public class AppUserController {
     @PostMapping("/member")
     @ResponseStatus(code = HttpStatus.CREATED)
     public AppUser registerMember(@Valid @RequestBody AppUser newAppUser) {
-        AppUser appUser = newAppUser.withRole(AppUserRole.MEMBER);
-        return saveAppUser(appUser);
+        // Create a new user
+        AppUser newUser = newAppUser.withRole(AppUserRole.MEMBER);
+
+        return saveAppUser(newUser);
 
     }
 
@@ -79,6 +83,11 @@ public class AppUserController {
         return appUserService.getAllUsernamesFromDb();
     }
 
+
+    @GetMapping("/getAllUsernamesWithoutLibrian")
+    public List<String> getAllUsernamesWithOutLibr() {
+        return appUserService.getAllUsernamesFromDb();
+    }
 
     @GetMapping("/logout")
     public void logout(HttpSession httpSession) {

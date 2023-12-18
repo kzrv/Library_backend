@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppUserService {
 
+
     private final AppUserRepository appUserRepository;
 
     public AppUser findByUsername(String username) {
@@ -28,7 +29,7 @@ public class AppUserService {
     }
 
     public List<String> getAllUsernamesFromDb() {
-        return appUserRepository.findAll().stream().map(AppUser::username).toList();
+        return appUserRepository.findAll().stream().filter(el->el.role()!=AppUserRole.LIBRARIAN).map(AppUser::username).toList();
     }
 
     public AppUser save(AppUser newAppUser, PasswordEncoder passwordEncoder) {
